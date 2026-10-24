@@ -8,7 +8,7 @@
 
 ## 宿題
 
-- 取り組んだレベル：基礎 / 実装 / 発展
-- やったこと：
+- 取り組んだレベル：実装
+- やったこと：会話履歴を保ったまま続けて質問できるように実装。ask.pyに--chatを追加。
 - 結果：
-- 気づき・疑問：
+- 気づき・疑問：実API実行でエラー発生。RuntimeError: Cannot send a request, as the client has been closed
