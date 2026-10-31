@@ -1,0 +1,201 @@
+{
+  "summary": {
+    "label": "after",
+    "n": 21,
+    "format_rate": 1.0,
+    "content_rate": 1.0,
+    "both_rate": 1.0,
+    "seconds": 44.1
+  },
+  "rows": [
+    {
+      "question": "領収書の提出ルールを教えてください",
+      "raw": "{\"answer\": \"支払金額が 3,000 円以上の場合は、必ず原本の領収書を添付してください。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "領収書を添付しなければならないのは何円以上ですか",
+      "raw": "{\"answer\": \"支払金額が 3,000 円以上の場合は、必ず原本の領収書を添付してください。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "レシートではなく領収書が必要になる金額を教えてください",
+      "raw": "{\"answer\": \"支払金額が 3,000 円以上の場合は、必ず原本の領収書を添付してください。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "締め切り時間を教えてください",
+      "raw": "{\"answer\": \"毎月の経費精算申請の締め切りは、翌月第 5 営業日の 17:00 です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "経費申請の毎月の締め切り日時を教えてください",
+      "raw": "{\"answer\": \"毎月の経費精算申請の締め切りは、翌月第 5 営業日の 17:00 です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "翌月の何日までに申請を出せばいいですか",
+      "raw": "{\"answer\": \"毎月の経費精算申請の締め切りは、翌月第 5 営業日の 17:00 です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "10万円以上の買い物の仕方は？",
+      "raw": "{\"answer\": \"単価 10 万円以上の備品購入やサービス契約には、事前稟議の承認が必要です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "事前稟議を通す必要がある金額のラインを教えてください",
+      "raw": "{\"answer\": \"単価 10 万円以上の備品購入やサービス契約には、事前稟議の承認が必要です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "高額購入時の事前申請ルールを教えてください",
+      "raw": "{\"answer\": \"単価 10 万円以上の備品購入やサービス契約には、事前稟議の承認が必要です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "定期券を持っている場合の交通費申請は？",
+      "raw": "{\"answer\": \"電車等の交通費清算では、自己の通勤定期区間を除いた実費のみ申請可能です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "通勤定期券を持っている区間の交通費精算について教えてください",
+      "raw": "{\"answer\": \"電車等の交通費清算では、自己の通勤定期区間を除いた実費のみ申請可能です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "定期券区間の運賃は控除する必要がありますか",
+      "raw": "{\"answer\": \"電車等の交通費清算では、自己の通勤定期区間を除いた実費のみ申請可能です。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "日当が支給されるのはどんなとき？",
+      "raw": "{\"answer\": \"1 泊以上の国内出張に限り、規程に基づき定額の日当（日払い手当）が支給されます。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "出張手当（日当）が支給される条件を教えてください",
+      "raw": "{\"answer\": \"1 泊以上の国内出張に限り、規程に基づき定額の日当（日払い手当）が支給されます。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "日帰出張と宿泊出張で日当の違いはありますか",
+      "raw": "{\"answer\": \"1 泊以上の国内出張に限り、規程に基づき定額の日当（日払い手当）が支給されます。\", \"needs_review\": false}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": false
+    },
+    {
+      "question": "在宅勤務中に自己判断で契約した高速インターネット回線の月額基本料は折半できますか",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    },
+    {
+      "question": "部内の懇親会費用について、部長のポケットマネーと合わせて精算する場合の特例ルールを教えてください",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    },
+    {
+      "question": "事前稟議が間に合わなかった15万円のPC購入ですが、事後報告フォームを出せば承認されますよね",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    },
+    {
+      "question": "社用車のガソリン代を私用のマイレージカードに付けるのは規程上問題ないですか",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    },
+    {
+      "question": "退職する社員の送別会費用は、福利厚生費として会社負担で全額落とせますか",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    },
+    {
+      "question": "取引先への香典代（慶弔手当）は領収書が出ないため、出金伝票だけで精算可能ですか",
+      "raw": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}",
+      "format_ok": true,
+      "format_reason": "",
+      "content_ok": true,
+      "both_ok": true,
+      "gold_needs_review": true
+    }
+  ]
+}
