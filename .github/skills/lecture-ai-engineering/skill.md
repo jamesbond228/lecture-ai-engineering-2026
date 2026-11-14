@@ -73,6 +73,18 @@ uv run python -m app.agent --list-tools
 - `tests/` は APIキーなしで動く前提で作る
 - 変更後は、関連するセルやCLIの入出力が壊れていないかを最低限確認する
 
+## 課題提出時の Pull Request
+
+受講生が課題の Pull Request（PR）を作成するときは、次の向きになるよう案内・確認する。
+
+- **base repository**: 受講生本人の fork
+- **base branch**: `main`
+- **head repository**: 同じ受講生の fork
+- **compare branch**: 課題の作業ブランチ（例：`lec04`）
+- **変更の向き**: 作業ブランチ → `main`
+
+GitHub の PR 作成画面では、`base` に `main`、`compare` に `lecNN` のような作業ブランチを選ぶ。講座本体のリポジトリを base repository にしない。作成前に、提出先が自分の fork であることと、変更の向きが正しいことを確認する。
+
 ## 出力のスタイル
 
 - 日本語で返答する

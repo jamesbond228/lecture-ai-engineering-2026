@@ -15,14 +15,50 @@ import argparse
 
 from google import genai
 from google.genai import errors
+from openai import APIStatusError, OpenAI
 
-from app.config import MODEL, api_error_message, get_api_key
+from app.config import (
+    MODEL,
+    OPENROUTER_BASE_URL,
+    PROVIDER,
+    api_error_message,
+    get_api_key,
+    get_openrouter_api_key,
+)
 
 # 講座に固有の質問。正しい答えは data/glossary.json の homework-levels にある
 DEFAULT_QUESTION = "AIE2026の講座の宿題にある「3レベル」とは何ですか？"
 
 
+class OpenRouterChat:
+    """OpenRouter の Chat Completions を会話履歴付きで呼び出す。"""
+
+    def __init__(self, client: OpenAI):
+        self.client = client
+        self.messages: list[dict[str, str]] = []
+
+    def send_message(self, question: str):
+        self.messages.append({"role": "user", "content": question})
+        response = self.client.chat.completions.create(
+            model=MODEL,
+            messages=self.messages,
+        )
+        message = response.choices[0].message
+        self.messages.append({"role": "assistant", "content": message.content or ""})
+        return response
+
+
 def create_chat():
+    if PROVIDER == "openrouter":
+        client = OpenAI(
+            api_key=get_openrouter_api_key(),
+            base_url=OPENROUTER_BASE_URL,
+        )
+        return client, OpenRouterChat(client)
+    if PROVIDER != "gemini":
+        raise SystemExit(
+            f"未対応の AIE_PROVIDER: {PROVIDER}。gemini または openrouter を指定してください。"
+        )
     client = genai.Client(api_key=get_api_key())
     return client, client.chats.create(model=MODEL)
 
@@ -31,6 +67,13 @@ def ask(question: str, chat=None) -> str:
     if chat is None:
         client, chat = create_chat()
     response = chat.send_message(question)
+    if PROVIDER == "openrouter":
+        usage = response.usage
+        input_tokens = usage.prompt_tokens if usage else "不明"
+        output_tokens = usage.completion_tokens if usage else "不明"
+        print(f"[トークン数] 入力: {input_tokens}, 出力: {output_tokens}")
+        return response.choices[0].message.content or ""
+
     usage = response.usage_metadata
     input_tokens = usage.prompt_token_count if usage else "不明"
     output_tokens = usage.candidates_token_count if usage else "不明"
@@ -60,6 +103,9 @@ def main() -> None:
                 break
     except errors.APIError as e:
         print(api_error_message(e.code, e.message))
+        raise SystemExit(1)
+    except APIStatusError as e:
+        print(api_error_message(e.status_code, str(e)))
         raise SystemExit(1)
 
 
