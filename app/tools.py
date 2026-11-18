@@ -130,3 +130,44 @@ def search_graph(query: str) -> str:
         return json.dumps({"error": str(e)}, ensure_ascii=False)
     except APIError as e:
         return json.dumps({"error": api_error_message(e.code)}, ensure_ascii=False)
+
+
+def make_quiz(lecture: int) -> str:
+    """指定した回の用語集から1つを選び、意味を問う確認問題と答えを返す。
+
+    「第2回の確認問題を出して」のように、指定した回の復習問題を求められたときに使う。
+    """
+    terms = [term for term in load_glossary() if term["lecture"] == lecture]
+    if not terms:
+        return f"第{lecture}回の用語が用語集に見つかりませんでした。"
+
+    term = random.choice(terms)
+    return f"問題: 「{term['term']}」の意味は？\n答え: {term['definition']}"
+
+
+def save_learning_log(content: str) -> str:
+    """学習内容を実行日付きで learning_log/ に Markdown ファイルとして保存する。
+
+    利用者が学んだことや振り返りを記録したいと依頼したときに使う。
+    content には学習内容だけを入れ、日時は含めない。実行日（yyyy/mm/dd）はこのツールが記録する。
+    利用者が保存を依頼したら必ずこのツールを呼ぶ。保存は取り消しにくいため、
+    実行前の確認は requires_approval によって行われる。
+    """
+    body = "\n".join(
+        line for line in content.strip().splitlines()
+        if not line.strip().startswith("- 日時:")
+    ).strip()
+    if body.startswith("# 学習記録"):
+        body = body.removeprefix("# 学習記録").strip()
+    if not body:
+        raise ValueError("保存する学習内容を指定してください。")
+
+    now = datetime.now().astimezone()
+    timestamp = now.strftime("%Y%m%d-%H%M%S")
+    date = now.strftime("%Y/%m/%d")
+    filename = f"{timestamp}-{uuid4().hex}.md"
+    LEARNING_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    path = LEARNING_LOG_DIR / filename
+    log = f"# 学習記録\n\n- 日時: {date}\n\n{body}\n"
+    path.write_text(log, encoding="utf-8")
+    return f"学習記録を保存しました: learning_log/{filename}"
