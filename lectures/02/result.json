@@ -1,0 +1,76 @@
+{
+  "config": {
+    "base_model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "seed": 42,
+    "num_train_epochs": 20,
+    "warmup_steps": 6,
+    "lr": 0.0002,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "max_seq_len": 512,
+    "max_new_tokens": 96,
+    "gen": {
+      "do_sample": false
+    }
+  },
+  "versions": {
+    "transformers": "5.18.0",
+    "peft": "0.21.1",
+    "trl": "1.14.2",
+    "torch": "2.11.0+cu130"
+  },
+  "method": "LoRA（量子化なし）",
+  "before": {
+    "label": "before",
+    "n": 21,
+    "format_rate": 0.6666666666666666,
+    "content_rate": 0.42857142857142855,
+    "both_rate": 0.42857142857142855,
+    "seconds": 49.4
+  },
+  "after": {
+    "label": "after",
+    "n": 21,
+    "format_rate": 1.0,
+    "content_rate": 1.0,
+    "both_rate": 1.0,
+    "seconds": 44.1
+  },
+  "regressed": [],
+  "knowledge": [
+    {
+      "質問": "単身赴任中の帰省旅費は精算できますか",
+      "FAQ にある": false,
+      "学習前の分類": "needs_review",
+      "学習前の出力": "{\"answer\": \"確認が必要\", \"needs_review\": true}",
+      "学習後の分類": "needs_review",
+      "学習後の出力": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}"
+    },
+    {
+      "質問": "経理部の部長の印鑑が必要ですか",
+      "FAQ にある": false,
+      "学習前の分類": "needs_review",
+      "学習前の出力": "{\"answer\": \"確認が必要\", \"needs_review\": true}",
+      "学習後の分類": "needs_review",
+      "学習後の出力": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}"
+    },
+    {
+      "質問": "社員食堂のランチ代は補填されますか",
+      "FAQ にある": false,
+      "学習前の分類": "needs_review",
+      "学習前の出力": "{\"answer\": \"確認が必要\", \"needs_review\": true}",
+      "学習後の分類": "needs_review",
+      "学習後の出力": "{\"answer\": \"この FAQ には記載がありません。運営に確認が必要です。\", \"needs_review\": true}"
+    },
+    {
+      "質問": "領収書はいくらから必要ですか",
+      "FAQ にある": false,
+      "学習前の分類": "format_error",
+      "学習前の出力": "{\"answer\": \"3,000 円\"}",
+      "学習後の分類": "asserted",
+      "学習後の出力": "{\"answer\": \"支払金額が 3,000 円以上の場合は、必ず原本の領収書を添付してください。\", \"needs_review\": false}"
+    }
+  ],
+  "executed_training_myself": true
+}

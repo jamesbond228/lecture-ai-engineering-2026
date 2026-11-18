@@ -27,11 +27,9 @@ from pydantic_ai import Agent
 from pydantic_ai.exceptions import ModelHTTPError, UnexpectedModelBehavior
 from pydantic_ai.messages import ModelMessage, ModelResponse, ToolCallPart, UserPromptPart
 from pydantic_ai.models.function import AgentInfo, FunctionModel
-from pydantic_ai.models.google import GoogleModel
-from pydantic_ai.providers.google import GoogleProvider
 
 from app import tools
-from app.config import MODEL, api_error_message, get_api_key
+from app.config import MODEL, api_error_message, build_model as build_configured_model
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CASES = ROOT / "data" / "eval" / "lec04_cases.jsonl"
@@ -123,9 +121,9 @@ def build_judge(model, rubric: str) -> Agent:
     return Agent(model, output_type=JudgeResult, instructions=instructions, model_settings={"temperature": 0.0})
 
 
-def build_llm_model(model_name: str) -> GoogleModel:
-    """Gemini のモデルを作る。API キーが無ければ手順を表示して終了する（app.agent と同じ）。"""
-    return GoogleModel(model_name, provider=GoogleProvider(api_key=get_api_key()))
+def build_llm_model(model_name: str):
+    """選択中のプロバイダーで採点用モデルを作る（app.agent と共通）。"""
+    return build_configured_model(model_name)
 
 
 # ---------------------------------------------------------------- 偽モデル（--model test）

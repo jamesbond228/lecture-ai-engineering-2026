@@ -21,14 +21,12 @@ from pathlib import Path
 from contextlib import nullcontext
 from time import perf_counter
 
-from pydantic_ai import Agent
+from pydantic_ai import Agent, DeferredToolRequests
 from pydantic_ai.exceptions import ModelHTTPError
 from fastmcp import Client
 from pydantic_ai.mcp import MCPToolset, StdioTransport
 from pydantic_ai.messages import ToolCallPart, ToolReturnPart
-from pydantic_ai.models.google import GoogleModel
 from pydantic_ai.models.test import TestModel
-from pydantic_ai.providers.google import GoogleProvider
 
 from app import tools
 from app.retrieval import run_full_context
@@ -115,8 +113,8 @@ def build_mcp_agent(config_path: Path = MCP_CONFIG) -> Agent:
     return Agent(instructions=INSTRUCTIONS, toolsets=load_mcp_servers(config_path))
 
 
-def build_model() -> GoogleModel:
-    return GoogleModel(MODEL, provider=GoogleProvider(api_key=get_api_key()))
+def build_model():
+    return build_configured_model()
 
 
 def print_tools(target: Agent) -> None:
