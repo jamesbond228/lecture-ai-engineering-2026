@@ -19,8 +19,8 @@ LoRAとQLoRAの仕組みについては、以下の資料に記載されてい�
 [time] 回答完了まで 9.96 秒（検索・埋め込みを含む）
 [usage] 入力 117,025 tokens / 出力 205 tokens / モデル応答 1 回
 [cost] 生成APIの推定コスト: $0.035620 USD（埋め込み・索引構築分は含まない）
-vscode ➜ /workspaces/lecture-ai-engineering-2026 (lec05) $ uv run python -m app.retrieval "LoRA QLoRA 違い"
 
+vscode ➜ /workspaces/lecture-ai-engineering-2026 (lec05) $ uv run python -m app.retrieval "LoRA QLoRA 違い"
 ============================================================
 検索結果 1
 ============================================================
@@ -187,6 +187,7 @@ FT でも知識が入りやすくなる
 なぜか
 評価用の 30 問は学習用と重ならないものを使う。差が小さいときは誤差の範囲かもしれないので、 3 回分のばらつきも書く
 © Matsuo-Iwasawa Lab, The University of Tokyo 61
+
 vscode ➜ /workspaces/lecture-ai-engineering-2026 (lec05) $ uv run python -m app.agent --trace "$AIE_QUESTION"
 [model] gemini-3.5-flash-lite
 講義資料によると、LoRAおよびQLoRAの仕組みについて以下のように説明されています。
@@ -204,6 +205,8 @@ vscode ➜ /workspaces/lecture-ai-engineering-2026 (lec05) $ uv run python -m ap
 [time] 回答完了まで 9.06 秒（検索・埋め込みを含む）
 [usage] 入力 3,027 tokens / 出力 188 tokens / モデル応答 2 回
 [cost] 生成APIの推定コスト: $0.001378 USD（埋め込み・索引構築分は含まない）
+
+
 vscode ➜ /workspaces/lecture-ai-engineering-2026 (lec05) $ uv run python -m app.agent --tree --trace "$AIE_QUESTION"
 [model] gemini-3.5-flash-lite
 第2回資料では、LoRAおよびQLOARについて以下のように説明されています。
