@@ -32,12 +32,16 @@ def test_built_index_can_be_searched(materials, monkeypatch):
         return [1, 0] if "本文1" in text else [0, 1]
 
     result = build_index(source, database, embedder=embed)
-    assert result["pages"] == 2  # 第5回の資料は検索対象に含めない
+    assert result["pages"] == 3
     assert all("章" in text and "ページ" in text for text in texts)
     monkeypatch.setattr(retrieval, "RAG_DB", database)
     monkeypatch.setattr(retrieval, "embed_text", lambda *_: [1, 0])
     hits = retrieval.search("質問")
-    assert [h["page_id"] for h in hits] == ["lec01-main-p001", "lec02-main-p001"]
+    assert [h["page_id"] for h in hits] == [
+        "lec01-main-p001",
+        "lec02-main-p001",
+        "lec05-main-p001",
+    ]
     assert hits[0]["content"] == "本文1"
     assert hits[0]["distance"] == pytest.approx(0)
 
