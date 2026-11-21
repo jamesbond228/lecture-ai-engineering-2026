@@ -12,11 +12,18 @@ AIエンジニアリング実践講座（AIE2026）の演習と宿題で使う�
 | GitHub の **個人** アカウント | このリポジトリを fork し、作業ブランチと PR で提出する | 会社や学校が管理するアカウントでは Codespaces・Copilot が制限されることがあります |
 | GitHub Codespaces | 第1・3・5回などの開発環境。`.devcontainer/` の設定で Python 3.12・uv・Node.js が入ったコンテナが自動で用意されます | 個人アカウントの無料枠は月 120 コア時間（2 コアで約 60 時間）。**使い終わったら停止**してください |
 | GitHub Copilot（Free でよい） | コードの補完とチャット。第6回の発展課題では MCP クライアントとしても使います | Free は補完・チャットの回数に月の上限があります |
-| Gemini API（Google AI Studio の無料枠） | 既定の LLM。**個人**の Google アカウントでキーを発行し、Codespaces secret `GEMINI_API_KEY` で渡します | 無料枠には 1 分あたり・1 日あたりの上限があります（下の「前提と制約」） |
-| OpenRouter（任意） | Gemini が API エラーになったときの代替プロバイダー。キーを Codespaces secret `OPENROUTER_API_KEY` に登録します | 利用できる無料モデルやレート制限は変わることがあります |
+| Gemini API（Google AI Studio の無料枠） | 既定の LLM。**個人**の Google アカウントでキーを発行し、Codespaces Secret またはローカルの `.env` で `GEMINI_API_KEY` を渡します | 無料枠には 1 分あたり・1 日あたりの上限があります（下の「前提と制約」） |
+| OpenRouter（任意） | Gemini が API エラーになったときの代替プロバイダー。キーを Codespaces Secret またはローカルの `.env` に設定します | 利用できる無料モデルやレート制限は変わることがあります |
 | Google Colab（T4 GPU、無料枠） | 第2回の LoRA 学習だけに使います | GPU の利用時間に上限があります。終わったらランタイムを削除してください |
 
-自分の PC で動かす場合は、Python 3.12 と [uv](https://docs.astral.sh/uv/) を入れて `uv sync --frozen` を実行し、Gemini を使う場合は `GEMINI_API_KEY`、OpenRouter を使う場合は `OPENROUTER_API_KEY` を設定してください。
+自分の PC で動かす場合は、Python 3.12 と [uv](https://docs.astral.sh/uv/) を入れて `uv sync --frozen` を実行し、リポジトリ直下の `.env` に使う API キーを設定してください。`.env` は Git で無視されます。Codespaces では従来どおり Codespaces Secret を使えます。どちらの場合も、プロセスに設定済みの環境変数が `.env` の値より優先されます。
+
+```dotenv
+GEMINI_API_KEY=your-gemini-api-key
+# OpenRouter を使う場合（任意）
+# AIE_PROVIDER=openrouter
+# OPENROUTER_API_KEY=your-openrouter-api-key
+```
 
 ## はじめに（第1回）
 

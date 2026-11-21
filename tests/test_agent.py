@@ -9,15 +9,24 @@ import json
 
 from pydantic_ai import DeferredToolRequests
 from pydantic_ai.messages import ToolCallPart, ToolReturnPart
+from pydantic_ai.models.google import GoogleModel
 from pydantic_ai.models.test import TestModel
 
-from app.agent import agent
+from app.agent import agent, build_model
 
 BASE_TOOLS = {"search_materials"}
 
 
 def _parts(result, kind):
     return [p for m in result.all_messages() for p in m.parts if isinstance(p, kind)]
+
+
+def test_build_model_uses_configured_model_builder(monkeypatch):
+    monkeypatch.setattr("app.config.PROVIDER", "gemini")
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+
+    assert isinstance(build_model(), GoogleModel)
 
 
 def test_base_tools_are_registered_and_called(monkeypatch):

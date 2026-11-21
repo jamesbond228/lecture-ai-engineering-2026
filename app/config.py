@@ -3,7 +3,18 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic_ai.models.fallback import FallbackModel
+
+ROOT = Path(__file__).resolve().parent.parent
+_ENV_FILE = ROOT / ".env"
+
+
+def _load_env() -> None:
+    load_dotenv(_ENV_FILE, override=False)
+
+
+_load_env()
 
 # Gemini を既定とし、環境変数で OpenRouter に切り替えられる。
 DEFAULT_PROVIDER = "gemini"
@@ -54,7 +65,6 @@ def build_model(model_name: str | None = None):
     )
 
 # 第5回: 1ページを1チャンクとして検索する。索引はscripts/build_rag_index.pyで作成する。
-ROOT = Path(__file__).resolve().parent.parent
 RAG_SOURCE = ROOT / "data/rag_data/lectures.json"
 RAG_TREE = ROOT / "data/rag_data/tree.json"
 RAG_GRAPH = ROOT / "data/rag_data/graph.json"
@@ -87,10 +97,9 @@ def get_api_key() -> str:
     if not key:
         raise SystemExit(
             "環境変数 GEMINI_API_KEY が見つかりません。\n"
-            "1. GitHub の Settings → Codespaces → Secrets に GEMINI_API_KEY を登録し、\n"
-            "   使う repository に自分の fork を選んでください。\n"
-            "2. Codespaces を起動したあとに登録した場合は、Codespaces を再起動してください。\n"
-            "   （左下の「Codespaces」→「Stop Current Codespace」→ 再度開く）"
+            "1. ローカルではリポジトリ直下の .env に GEMINI_API_KEY を設定してください。\n"
+            "2. Codespaces では GitHub の Settings → Codespaces → Secrets に登録してください。\n"
+            "   使う repository に自分の fork を選び、登録後は Codespace を再起動してください。"
         )
     return key
 
@@ -101,7 +110,7 @@ def get_openrouter_api_key() -> str:
     if not key:
         raise SystemExit(
             "環境変数 OPENROUTER_API_KEY が見つかりません。\n"
-            "OpenRouter の API キーを Codespaces secret または環境変数に設定してください。\n"
+            "ローカルではリポジトリ直下の .env に、Codespaces では Secret に設定してください。\n"
             "キーをコードやチャット、コミットに書かないでください。"
         )
     return key

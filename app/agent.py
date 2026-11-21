@@ -30,7 +30,7 @@ from pydantic_ai.models.test import TestModel
 
 from app import tools
 from app.retrieval import run_full_context
-from app.config import MODEL, api_error_message, get_api_key
+from app.config import MODEL, api_error_message, build_model as build_configured_model
 
 INSTRUCTIONS = """\
 あなたはAIエンジニアリング講座（AIE2026）の学習支援エージェントです。
