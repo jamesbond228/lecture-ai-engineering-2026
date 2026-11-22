@@ -12,12 +12,14 @@
 """
 
 import argparse
+import os
 
 from google import genai
 from google.genai import errors
 from openai import APIStatusError, OpenAI
 
 from app.config import (
+    DEFAULT_OPENROUTER_MODEL,
     MODEL,
     OPENROUTER_BASE_URL,
     PROVIDER,
@@ -36,6 +38,7 @@ class OpenRouterChat:
     def __init__(self, client: OpenAI):
         self.client = client
         self.messages: list[dict[str, str]] = []
+        self.provider = "openrouter"
 
     def send_message(self, question: str):
         self.messages.append({"role": "user", "content": question})
@@ -45,6 +48,50 @@ class OpenRouterChat:
         )
         message = response.choices[0].message
         self.messages.append({"role": "assistant", "content": message.content or ""})
+        return response
+
+
+class GeminiWithOpenRouterFallback:
+    """Gemini を優先し、API エラー時は会話を引き継いで OpenRouter に切り替える。"""
+
+    def __init__(self, gemini_chat):
+        self.gemini_chat = gemini_chat
+        self.openrouter_chat = None
+        self.history: list[dict[str, str]] = []
+        self.provider = "gemini"
+
+    def send_message(self, question: str):
+        if self.openrouter_chat is None:
+            try:
+                response = self.gemini_chat.send_message(question)
+            except errors.APIError:
+                if not os.getenv("OPENROUTER_API_KEY"):
+                    raise
+                print(
+                    "[fallback] Gemini API エラーのため、"
+                    f"OpenRouter（{DEFAULT_OPENROUTER_MODEL}）に切り替えます。"
+                )
+                client = OpenAI(
+                    api_key=get_openrouter_api_key(),
+                    base_url=OPENROUTER_BASE_URL,
+                )
+                self.openrouter_chat = OpenRouterChat(client)
+                self.openrouter_chat.messages = list(self.history)
+                self.provider = "openrouter"
+                response = self.openrouter_chat.send_message(question)
+        else:
+            response = self.openrouter_chat.send_message(question)
+
+        if self.provider == "openrouter":
+            answer = response.choices[0].message.content or ""
+        else:
+            answer = response.text or ""
+        self.history.extend(
+            [
+                {"role": "user", "content": question},
+                {"role": "assistant", "content": answer},
+            ]
+        )
         return response
 
 
@@ -60,14 +107,15 @@ def create_chat():
             f"未対応の AIE_PROVIDER: {PROVIDER}。gemini または openrouter を指定してください。"
         )
     client = genai.Client(api_key=get_api_key())
-    return client, client.chats.create(model=MODEL)
+    return client, GeminiWithOpenRouterFallback(client.chats.create(model=MODEL))
 
 
 def ask(question: str, chat=None) -> str:
     if chat is None:
         client, chat = create_chat()
     response = chat.send_message(question)
-    if PROVIDER == "openrouter":
+    provider = getattr(chat, "provider", PROVIDER)
+    if provider == "openrouter":
         usage = response.usage
         input_tokens = usage.prompt_tokens if usage else "不明"
         output_tokens = usage.completion_tokens if usage else "不明"

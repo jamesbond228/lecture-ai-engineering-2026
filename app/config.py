@@ -1,6 +1,20 @@
 """講座全体で共通のモデル・API設定。"""
 
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from pydantic_ai.models.fallback import FallbackModel
+
+ROOT = Path(__file__).resolve().parent.parent
+_ENV_FILE = ROOT / ".env"
+
+
+def _load_env() -> None:
+    load_dotenv(_ENV_FILE, override=False)
+
+
+_load_env()
 
 # Gemini を既定とし、環境変数で OpenRouter に切り替えられる。
 DEFAULT_PROVIDER = "gemini"
@@ -21,7 +35,20 @@ def build_model(model_name: str | None = None):
         from pydantic_ai.models.google import GoogleModel
         from pydantic_ai.providers.google import GoogleProvider
 
-        return GoogleModel(name, provider=GoogleProvider(api_key=get_api_key()))
+        gemini_model = GoogleModel(name, provider=GoogleProvider(api_key=get_api_key()))
+        if os.getenv("OPENROUTER_API_KEY"):
+            from pydantic_ai.models.openai import OpenAIChatModel
+            from pydantic_ai.providers.openai import OpenAIProvider
+
+            openrouter_model = OpenAIChatModel(
+                DEFAULT_OPENROUTER_MODEL,
+                provider=OpenAIProvider(
+                    api_key=get_openrouter_api_key(),
+                    base_url=OPENROUTER_BASE_URL,
+                ),
+            )
+            return FallbackModel(gemini_model, openrouter_model)
+        return gemini_model
     if PROVIDER == "openrouter":
         from pydantic_ai.models.openai import OpenAIChatModel
         from pydantic_ai.providers.openai import OpenAIProvider
@@ -36,6 +63,27 @@ def build_model(model_name: str | None = None):
     raise SystemExit(
         f"未対応の AIE_PROVIDER: {PROVIDER}。gemini または openrouter を指定してください。"
     )
+
+# 第5回: 1ページを1チャンクとして検索する。索引はscripts/build_rag_index.pyで作成する。
+RAG_SOURCE = ROOT / "data/rag_data/lectures.json"
+RAG_TREE = ROOT / "data/rag_data/tree.json"
+RAG_GRAPH = ROOT / "data/rag_data/graph.json"
+RAG_DB = Path(os.getenv("AIE_RAG_DB", str(ROOT / "data/rag_data/index.sqlite3")))
+RAG_DOCUMENT_IDS = [
+    "lec01-main",
+    "lec02-main",
+    "lec03-main",
+    "lec04-main",
+    "lec05-main",
+]
+RAG_TOP_K = 5
+GRAPH_START_K = 3
+GRAPH_HOPS = 2
+GRAPH_MAX_RESULTS = 10
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIMENSIONS = 768
+# 2,048トークンの上限に対し、タスク指定等の分を残す。超過時は切り捨てず停止する。
+EMBEDDING_MAX_TOKENS = 2000
 
 
 def api_error_message(status: int, detail: str = "") -> str:
@@ -55,10 +103,9 @@ def get_api_key() -> str:
     if not key:
         raise SystemExit(
             "環境変数 GEMINI_API_KEY が見つかりません。\n"
-            "1. GitHub の Settings → Codespaces → Secrets に GEMINI_API_KEY を登録し、\n"
-            "   使う repository に自分の fork を選んでください。\n"
-            "2. Codespaces を起動したあとに登録した場合は、Codespaces を再起動してください。\n"
-            "   （左下の「Codespaces」→「Stop Current Codespace」→ 再度開く）"
+            "1. ローカルではリポジトリ直下の .env に GEMINI_API_KEY を設定してください。\n"
+            "2. Codespaces では GitHub の Settings → Codespaces → Secrets に登録してください。\n"
+            "   使う repository に自分の fork を選び、登録後は Codespace を再起動してください。"
         )
     return key
 
@@ -69,7 +116,7 @@ def get_openrouter_api_key() -> str:
     if not key:
         raise SystemExit(
             "環境変数 OPENROUTER_API_KEY が見つかりません。\n"
-            "OpenRouter の API キーを Codespaces secret または環境変数に設定してください。\n"
+            "ローカルではリポジトリ直下の .env に、Codespaces では Secret に設定してください。\n"
             "キーをコードやチャット、コミットに書かないでください。"
         )
     return key
